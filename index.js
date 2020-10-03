@@ -6,19 +6,25 @@ const argv = require('minimist')(process.argv.slice(2));
 // -a, --action: an action encode/decode
 
 // TODO: add validation
-// const shift = argv.s || argv.shift;
+const shift = argv.s || argv.shift;
 // const action = argv.a || argv.action;
 const input = argv.i || argv.input;
 const output =  argv.o || argv.output;
 
 const fs = require('fs');
 const { pipeline } = require('stream');
+const TransformStream = require('./src/TransformStream');
+
+
 
 const readStream = input ? fs.createReadStream(input) : process.stdin;
 const writeStream = output ? fs.createWriteStream(output) : process.stdout;
 
+const transformStream = new TransformStream(shift);
+
 pipeline(
   readStream,
+  transformStream,
   writeStream,
   () => {}
 )
