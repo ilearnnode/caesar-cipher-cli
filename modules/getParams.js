@@ -5,16 +5,16 @@ async function getParams() {
   const argv = require('minimist')(process.argv.slice(2));
 
   return {
-    shift: getParam(argv, 's', 'shift', validateShift),
-    action: getParam(argv, 'a', 'action', validateAction),
+    shift: await getParam(argv, 's', 'shift', validateShift),
+    action: await getParam(argv, 'a', 'action', validateAction),
     input: await getParam(argv, 'i', 'input', validateInput),
     output: await getParam(argv, 'o', 'output', validateOutput),
   };
 }
 
-function getParam(argv, name, alias, validate = () => true) {
+async function getParam(argv, name, alias, validate = () => true) {
   const val = argv[name] || argv[alias];
-  return validate(val) && val;
+  return await validate(val) && val;
 }
 
 function validateShift(val) {
@@ -31,17 +31,36 @@ function validateAction(val) {
 }
 
 function validateInput(val) {
-  if (val) {
-    fs.access(val, fs.constants.F_OK | fs.constants.R_OK, (err) => err && onError(err.message));
+  if (!val) {
+    return true;
   }
-  return true;
+
+  return new Promise((res, rej) => {
+    fs.access(val, fs.constants.F_OK | fs.constants.R_OK, (err) => {
+      if (err) {
+        onError(err.message);
+        rej();
+      }
+      res(true);
+    });
+  });
 }
 
 function validateOutput(val) {
-  if (val) {
-    fs.access(val, fs.constants.F_OK | fs.constants.R_OK, (err) => err && onError(err.message));
+  if (!val) {
+    return true;
   }
-  return true;
+
+  return new Promise((res, rej) => {
+    fs.access(val, fs.constants.F_OK | fs.constants.R_OK,
+      (err) => {
+        if (err) {
+          onError(err.message);
+          rej();
+        }
+        res(true);
+      });
+  });
 }
 
 function validate(val, expression, message) {
