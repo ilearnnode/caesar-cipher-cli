@@ -18,15 +18,15 @@ function getParam(argv, name, alias, validate = () => true) {
 }
 
 function validateShift(val) {
-  validate(val, (val) => val !== undefined, 'shift is required');
-  validate(val, (val) => !isNaN(val), 'shift should be a number');
+  validate(val, (val) => val !== undefined, '--shift is required');
+  validate(val, (val) => !isNaN(val), '--shift should be a number');
   return true;
 }
 
 function validateAction(val) {
-  validate(val, (val) => val !== undefined, 'action is required');
+  validate(val, (val) => val !== undefined, '--action is required');
   validate(val, (val) => ['encode', 'decode'].includes(val),
-    'action should be one of the following "encode", "decode"');
+    '--action should be one of the following "encode", "decode"');
   return true;
 }
 
