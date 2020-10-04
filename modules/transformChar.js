@@ -4,7 +4,7 @@ for (let i = 97; i <= 122; i++) {
 }
 
 // TODO: check negative shift
-function transformChar(initial, index, shift, encode = true) {
+function transformChar(initial, index, shift, encode) {
   const inputChar = initial[index];
   const inputLowerChar = inputChar.toLowerCase();
   const inputIndex = alphabet.indexOf(inputLowerChar);
@@ -32,6 +32,4 @@ function getOffsetIndex(index) {
   return index % alphabet.length;
 }
 
-module.exports = {
-  transformChar,
-};
+module.exports = transformChar;

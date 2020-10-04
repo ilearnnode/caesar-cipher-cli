@@ -1,18 +1,18 @@
-const { transformChar } = require('./caesar');
 const { Transform } = require('stream');
+const transformChar = require('./transformChar');
 
 class TransformStream extends Transform {
-  // TODO: remove shift. this.shift before or after const???
-  constructor(shift = 0) {
+  constructor(shift, encode) {
     super();
     this.shift = shift;
+    this.encode = encode;
   }
 
   _transform(chunk, env, done) {
     const strChunk = chunk.toString();
     let res = '';
     for (let i = 0; i < strChunk.length; i++) {
-      res += transformChar(strChunk, i, this.shift);
+      res += transformChar(strChunk, i, this.shift, this.encode);
     }
     this.push(res);
     done();
