@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { pipeline } = require('stream');
 const TransformStream = require('./TransformStream');
+const endOfLine = require('os').EOL;
 
 function transform ({ shift, action, input, output }) {
   const readStream = input ? fs.createReadStream(input) : process.stdin;
@@ -11,7 +12,12 @@ function transform ({ shift, action, input, output }) {
     readStream,
     transformStream,
     writeStream,
-    () => {}
+    (err) => {
+      if (err) {
+        process.stderr.write(`Error: ${err.message}` + endOfLine);
+        process.exit(1);
+      }
+    }
   );
 }
 
