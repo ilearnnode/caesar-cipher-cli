@@ -5,7 +5,7 @@ const endOfLine = require('os').EOL;
 
 function transform ({ shift, action, input, output }) {
   const readStream = input ? fs.createReadStream(input) : process.stdin;
-  const writeStream = output ? fs.createWriteStream(output) : process.stdout;
+  const writeStream = output ? fs.createWriteStream(output, { flags: 'a' }) : process.stdout;
   const transformStream = new TransformStream(shift, action === 'encode');
 
   pipeline(
