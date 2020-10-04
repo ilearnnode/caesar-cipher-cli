@@ -4,6 +4,7 @@
 
 #### Installation:
 ```
+cd caesar-cipher-cli
 npm install
 ```
 
